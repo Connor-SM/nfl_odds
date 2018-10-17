@@ -34,7 +34,7 @@ class Odds extends Component {
         'GB': 'Green Bay',
         'HOU': 'Houston',
         'IND': 'Indianapolis',
-        'JAC': 'Jacksonville',
+        'JAX': 'Jacksonville',
         'KC': 'Kansas City',
         'LAC': 'Los Angelos (Chargers)',
         'LAR': 'Los Angelos (Rams)',
@@ -59,7 +59,7 @@ class Odds extends Component {
   componentWillMount() {
     // add header for api_key to fetch call
     fetch(
-      'https://api.fantasydata.net/v3/nfl/odds/JSON/GameOddsByWeek/2018/7',
+      `https://api.fantasydata.net/v3/nfl/odds/JSON/GameOddsByWeek/${this.props.year}/${this.props.week}`,
       { headers: { 'Ocp-Apim-Subscription-Key': API_KEY } }).then(
         res => res.json()).then(
           data => {
@@ -81,8 +81,13 @@ class Odds extends Component {
           <table className="table">
             <thead className="thead-dark">
               <tr>
-                <th scope="col">#</th>
+                <th scope="col">
+                  <img className="logo" src={require('../../../static/images/nfl.png')} alt="NFL Logo" />
+                </th>
                 <th scope="col">Away Team</th>
+                <th scope="col">
+                  <img className="logo" src={require('../../../static/images/nfl.png')} alt="NFL Logo" />
+                </th>
                 <th scope="col">Home Team</th>
                 <th scope="col">Over/Under</th>
               </tr>
