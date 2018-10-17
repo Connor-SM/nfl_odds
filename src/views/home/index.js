@@ -2,13 +2,27 @@ import React, { Component } from 'react';
 import './index.css';
 import Odds from '../../components/tables/odds';
 import OddsForm from '../../components/oddsForm';
+import API_KEY from '../../config.js';
+
 
 class Home extends Component {
   constructor() {
     super();
     this.state = {
       year: 2018,
-      week: 1
+      week: 1,
+      data: [
+        {
+          HomeTeamName: '',
+          AwayTeamName: '',
+          Week: 0,
+          PregameOdds: [
+            {
+              OverUnder: 0
+            }
+          ]
+        }
+      ]
     }
   }
 
@@ -21,7 +35,26 @@ class Home extends Component {
     this.setState({
       year: year,
       week: week
-    })
+    });
+
+    this.getData(year, week);
+  }
+
+  getData = (year, week) => {
+    // add header for api_key to fetch call
+    fetch(
+      `https://api.fantasydata.net/v3/nfl/odds/JSON/GameOddsByWeek/${year}/${week}`,
+      { headers: { 'Ocp-Apim-Subscription-Key': API_KEY } }).then(
+        res => res.json()).then(
+          data => {
+            console.log(data);
+            this.setState({ data: data});
+          }
+        );
+  }
+
+  componentWillMount() {
+    this.getData(2018, 1);
   }
 
   render() {
@@ -31,7 +64,7 @@ class Home extends Component {
           <OddsForm getInput={this.getInput} />
           <h1>Year: {this.state.year}</h1>
           <h3>Week: {this.state.week}</h3>
-          <Odds year={this.state.year} week={this.state.week} />
+          <Odds data={this.state.data} year={this.state.year} week={this.state.week} />
         </div>
       </div>
     );

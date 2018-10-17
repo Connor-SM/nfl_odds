@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
 import './index.css';
-import API_KEY from '../../../config.js';
 import OddsList from './oddsList';
 
 class Odds extends Component {
   constructor() {
     super();
     this.state = {
-      data: [
-        {
-          HomeTeamName: '',
-          AwayTeamName: '',
-          Week: 0,
-          PregameOdds: [
-            {
-              OverUnder: 0
-            }
-          ]
-        }
-      ],
       teams: {
         'ARI': 'Arizona',
         'ATL': 'Atlanta',
@@ -56,19 +43,6 @@ class Odds extends Component {
     }
   }
 
-  componentWillMount() {
-    // add header for api_key to fetch call
-    fetch(
-      `https://api.fantasydata.net/v3/nfl/odds/JSON/GameOddsByWeek/${this.props.year}/${this.props.week}`,
-      { headers: { 'Ocp-Apim-Subscription-Key': API_KEY } }).then(
-        res => res.json()).then(
-          data => {
-            console.log(data);
-            this.setState({ data: data});
-          }
-        );
-  }
-
   nameChange = (abbr) => {
     // console.log(this.state.teams[abbr]);
     return this.state.teams[abbr];
@@ -92,7 +66,7 @@ class Odds extends Component {
                 <th scope="col">Over/Under</th>
               </tr>
             </thead>
-            <OddsList data={this.state.data} nameChange={this.nameChange} />
+            <OddsList data={this.props.data} nameChange={this.nameChange} />
           </table>
         </div>
       </div>
